@@ -1,15 +1,14 @@
 ---
-title: "word-freq"
+title: "Word frequencies"
 author: "Andrew"
 date: "02/10/2022"
 output: rmarkdown::github_document
-        #toc: true
 editor_options: 
   chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(tidytext)
 library(readtext)
 library(dplyr)
@@ -24,7 +23,8 @@ library(stringr)
 # Frequency of words in a book
 ## Data prep
 
-### Load the text file and tokenise words: 
+### Load the text file and tokenise words:
+I'm using a book that I want to read in my target language. Any `.txt` file will work (and you can convert ebooks to `.txt` with calibre).
 ```{r}
 book_pt <- readtext(file = "hp-01.txt", encoding = "utf-8")
 summary(book_pt)

@@ -1,4 +1,4 @@
-README
+Word frequencies
 ================
 Andrew
 02/10/2022
@@ -9,71 +9,26 @@ Andrew
 
 ### Load the text file and tokenise words:
 
-``` r
-book_pt <- readtext(file = "hp-01.txt", encoding = "utf-8")
-summary(book_pt)
-```
+I’m using a book that I want to read in my target language. Any `.txt`
+file will work (and you can convert ebooks to `.txt` with calibre).
 
     ##     doc_id              text          
     ##  Length:1           Length:1          
     ##  Class :character   Class :character  
     ##  Mode  :character   Mode  :character
 
-``` r
-book_pt_token <- book_pt %>%
-        unnest_tokens(word, text)
-```
-
 ### Add portuguese stop words:
 
-``` r
-# source: https://gist.github.com/alopes/5358189
-stop_pt <- c('de', 'a', 'o', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 'as', 'dos', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'era', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'estão', 'você', 'tinha', 'foram', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'elas', 'havia', 'seja', 'qual', 'será', 'nós', 'tenho', 'lhe', 'deles', 'essas', 'esses', 'pelas', 'este', 'fosse', 'dele', 'tu', 'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 'aqueles', 'aquelas', 'isto', 'aquilo', 'estou', 'está', 'estamos', 'estão', 'estive', 'esteve', 'estivemos', 'estiveram', 'estava', 'estávamos', 'estavam', 'estivera', 'estivéramos', 'esteja', 'estejamos', 'estejam', 'estivesse', 'estivéssemos', 'estivessem', 'estiver', 'estivermos', 'estiverem', 'hei', 'há', 'havemos', 'hão', 'houve', 'houvemos', 'houveram', 'houvera', 'houvéramos', 'haja', 'hajamos', 'hajam', 'houvesse', 'houvéssemos', 'houvessem', 'houver', 'houvermos', 'houverem', 'houverei', 'houverá', 'houveremos', 'houverão', 'houveria', 'houveríamos', 'houveriam', 'sou', 'somos', 'são', 'era', 'éramos', 'eram', 'fui', 'foi', 'fomos', 'foram', 'fora', 'fôramos', 'seja', 'sejamos', 'sejam', 'fosse', 'fôssemos', 'fossem', 'for', 'formos', 'forem', 'serei', 'será', 'seremos', 'serão', 'seria', 'seríamos', 'seriam', 'tenho', 'tem', 'temos', 'tém', 'tinha', 'tínhamos', 'tinham', 'tive', 'teve', 'tivemos', 'tiveram', 'tivera', 'tivéramos', 'tenha', 'tenhamos', 'tenham', 'tivesse', 'tivéssemos', 'tivessem', 'tiver', 'tivermos', 'tiverem', 'terei', 'terá', 'teremos', 'terão', 'teria', 'teríamos', 'teriam')
-stop_pt <- as_tibble(stop_pt)
-```
-
 ### Add character names as stop words (more to add):
-
-``` r
-char_names <- c("harry", "potter", "dursley", "rony", "hermione", "hagrid", "snape", "dumbledore") %>% as_tibble()
-```
 
 ## Visualisations
 
 Top 20 words and their frequency:
-
-``` r
-book_pt_token_subset <- book_pt_token %>% 
-        count(word, sort = TRUE) %>%
-        anti_join(stop_pt, by = c("word" = "value")) %>%
-        anti_join(char_names, by = c("word" = "value"))
-
-book_pt_token_subset %>% 
-        top_n(20, wt = n) %>%
-        ggplot(aes(x = reorder(word, n), n)) +
-        geom_bar(stat = "identity") +
-        coord_flip() +
-        xlab("Palavra") +
-        ylab("Frequência") +
-        theme_bw()
-```
-
-![](word-freq_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ### Generate a word cloud with the top 100 words:
 
-``` r
-wordcloud(
-        words = book_pt_token_subset$word,
-        freq = book_pt_token_subset$n,
-        min.freq = 1,
-        max.words = 100,
-        random.order = FALSE,
-        colors = brewer.pal(7, "Greens")
-)
-```
-
-![](word-freq_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ### Top 1000 words:
 
@@ -83,12 +38,6 @@ Full list:
 </summary>
 
 TODO: Add a translation col
-
-``` r
-book_pt_token_subset %>% 
-        top_n(1000, wt = n) %>% 
-  kable(format = "pipe", col.names = c('Word', 'Frequency'))
-```
 
 | Word           | Frequency |
 |:---------------|----------:|
@@ -1175,30 +1124,9 @@ book_pt_token_subset %>%
 | visto          |         8 |
 | voltara        |         8 |
 
-``` r
-# google.dataset.out <- translate(dataset = book_pt_token_subset,
-#                                 content.field = 'word',
-#                                 google.api.key = #,
-#                                 source.lang = 'en',
-#                                 target.lang = 'pt')
-```
-
 </details>
 
 ## Sentence mining
 
 In progress. Loop through a subset of most common words and extract the
 first matching sentence for each word.
-
-``` r
-# book_pt_token_subset_10 <- book_pt_token_subset %>% 
-#         top_n(10, wt = n)
-# 
-# book_pt_sentences <- tibble(text = book_pt) %>% 
-#   unnest_tokens(sentence, text, token = "sentences")
-```
-
-``` r
-# asdf <- book_pt_sentences[str_detect(book_pt_sentences$sentence, "dumbledore"), ]
-# asdf[[1,1]]
-```
